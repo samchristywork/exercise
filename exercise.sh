@@ -19,3 +19,17 @@ function countdown() {
         : $((secs--))
     done
 }
+
+case "$1" in
+    add)
+        if [ $# -ne 3 ]; then
+            echo "Usage: $0 add <exercise> <reps>"
+            exit 1
+        fi
+        echo "$(date '+%Y-%m-%d %H:%M:%S')	$3	$2" >> "$filename"
+        ;;
+    *)
+        echo "Unknown command: $1"
+        exit 1
+        ;;
+esac
