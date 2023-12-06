@@ -7,8 +7,16 @@ if [ ! -f "$filename" ]; then
 fi
 
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 <command>"
-    exit 1
+  echo "Usage: $0 <command>"
+  echo "Commands:"
+  echo "  add <exercise> <reps>"
+  echo "  today <exercise>"
+  echo "  start <exercise> <reps> <interval>"
+  echo "  goal <start time> <end time> <exercise> <start reps> <end reps>"
+  echo "  show"
+  echo "  edit"
+  echo "  summary"
+  exit 1
 fi
 
 function countdown() {
