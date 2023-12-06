@@ -28,6 +28,32 @@ case "$1" in
         fi
         echo "$(date '+%Y-%m-%d %H:%M:%S')	$3	$2" >> "$filename"
         ;;
+    start)
+        if [ $# -ne 4 ]; then
+            echo "Usage: $0 start <exercise> <reps> <interval>"
+            exit 1
+        fi
+        while true; do
+            ./exercise.sh add "$2" "$3"
+            echo "Added $3 $2"
+
+            date=$(date +%Y-%m-%d)
+            grep "$date" "$filename" | grep "$2" | \
+              awk -F '\t' '
+                          BEGIN {sum=0}
+                          {sum+=$2}
+                          END {print sum, "today"}'
+
+            countdown "$4"
+
+            read -r -p "Continue? [y/n] " yn
+            case "$yn" in
+                [Yy]* ) continue;;
+                [Nn]* ) break;;
+                * ) continue;;
+            esac
+        done
+        ;;
     *)
         echo "Unknown command: $1"
         exit 1
