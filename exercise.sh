@@ -54,6 +54,24 @@ case "$1" in
             esac
         done
         ;;
+    goal)
+        if [ $# -ne 3 ]; then
+            echo "Usage: $0 goal <start time> <end time> <exercise> <start reps> <end reps>"
+        fi
+
+        start_time="$(date -d "$2" +%s)"
+        end_time="$(date -d "$3" +%s)"
+        exercise="$4"
+        start_reps="$5"
+        end_reps="$6"
+        current_time="$(date +%s)"
+        ;;
+    show)
+        cat "$filename"
+        ;;
+    edit)
+        "$EDITOR" "$filename"
+        ;;
     *)
         echo "Unknown command: $1"
         exit 1
