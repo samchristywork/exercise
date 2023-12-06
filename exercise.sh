@@ -99,6 +99,26 @@ case "$1" in
   edit)
     "$EDITOR" "$filename"
     ;;
+  summary)
+    date=$(date +%Y-%m-%d)
+    grep "$date" "$filename" | \
+    awk -F '\t' '
+        BEGIN {
+          categories["curls"] = 0
+          categories["pullups"] = 0
+          categories["pushups"] = 0
+          categories["endurance"] = 0
+        }
+        {
+          categories[$3] += $2
+        }
+        END {
+          for (category in categories) {
+            print category, categories[category]
+          }
+        }
+        '
+    ;;
   *)
     echo "Unknown command: $1"
     exit 1
