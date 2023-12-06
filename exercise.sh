@@ -36,6 +36,18 @@ case "$1" in
     fi
     echo "$(date '+%Y-%m-%d %H:%M:%S')	$3	$2" >> "$filename"
     ;;
+  today)
+    if [ $# -ne 2 ]; then
+      echo "Usage: $0 today <exercise>"
+      exit 1
+    fi
+    date=$(date +%Y-%m-%d)
+    grep "$date" "$filename" | grep "$2" | \
+    awk -F '\t' '
+          BEGIN {sum=0}
+          {sum+=$2}
+        END {print sum, "today"}'
+    ;;
   start)
     if [ $# -ne 4 ]; then
       echo "Usage: $0 start <exercise> <reps> <interval>"
