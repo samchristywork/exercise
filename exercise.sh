@@ -69,9 +69,30 @@ case "$1" in
       esac
     done
     ;;
+  goal)
+    if [ $# -ne 6 ]; then
+      echo "Usage: $0 goal <start time> <end time> <exercise> <start reps> <end reps>"
+    fi
 
     start_time="$(date -d "$2" +%s)"
+    end_time="$(date -d "$3" +%s)"
+    exercise="$4"
+    start_reps="$5"
+    end_reps="$6"
 
+    while :; do
+      current_time="$(date +%s)"
+      awk -F '\t' -v start_time="$start_time" -v end_time="$end_time" -v exercise="$exercise" -v start_reps="$start_reps" -v end_reps="$end_reps" -v current_time="$current_time" '
+        END {
+          estimated_progress = (current_time - start_time) / (end_time - start_time)
+          estimated_reps = start_reps + (end_reps - start_reps) * estimated_progress
+          print "Estimated reps for " exercise ": " estimated_reps
+        }
+      ' "$filename"
+      ./exercise.sh today "$exercise"
+      sleep 1
+    done
+    ;;
   show)
     cat "$filename"
     ;;
