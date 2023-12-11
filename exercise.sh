@@ -54,10 +54,10 @@ case "$1" in
       exit 1
     fi
     while true; do
-      ./exercise.sh add "$2" "$3"
+      "$0" add "$2" "$3"
       echo "Added $3 $2"
 
-      ./exercise.sh today "$2"
+      "$0" today "$2"
 
       countdown "$4"
 
@@ -89,7 +89,7 @@ case "$1" in
           print "Estimated reps for " exercise ": " estimated_reps
         }
       ' "$filename"
-      ./exercise.sh today "$exercise"
+      "$0" today "$exercise"
       sleep 1
     done
     ;;
