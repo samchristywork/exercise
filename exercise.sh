@@ -15,7 +15,7 @@ if [ $# -eq 0 ]; then
   echo "  goal <start time> <end time> <exercise> <start reps> <end reps>"
   echo "  show"
   echo "  edit"
-  echo "  summary"
+  echo "  summary <date>"
   exit 1
 fi
 
@@ -101,6 +101,11 @@ case "$1" in
     ;;
   summary)
     date=$(date +%Y-%m-%d)
+
+    if [ $# -eq 2 ]; then
+      date="$2"
+    fi
+
     grep "$date" "$filename" | \
     awk -F '\t' '
         BEGIN {
