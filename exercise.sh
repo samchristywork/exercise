@@ -11,6 +11,7 @@ if [ $# -eq 0 ]; then
   echo "Commands:"
   echo "  add <exercise> <reps>"
   echo "  today <exercise>"
+  echo "  count <exercise>"
   echo "  start <exercise> <reps> <interval>"
   echo "  goal <start time> <end time> <exercise> <start reps> <end reps>"
   echo "  show"
@@ -47,6 +48,27 @@ case "$1" in
           BEGIN {sum=0}
           {sum+=$2}
         END {print sum, "today"}'
+    ;;
+  count)
+    if [ $# -ne 2 ]; then
+      echo "Usage: $0 count <exercise>"
+      exit 1
+    fi
+
+    exercise="$2"
+
+    awk '
+      BEGIN{
+        a=0
+      }
+      {
+        if($4=="'"$exercise"'"){
+          a+=$3
+        }
+      }
+      END{
+        print a
+      }' < "$filename"
     ;;
   start)
     if [ $# -ne 4 ]; then
