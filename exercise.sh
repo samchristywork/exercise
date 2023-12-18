@@ -6,17 +6,22 @@ if [ ! -f "$filename" ]; then
   touch "$filename"
 fi
 
-if [ $# -eq 0 ]; then
+function usage() {
   echo "Usage: $0 <command>"
   echo "Commands:"
-  echo "  add <exercise> <reps>"
-  echo "  today <exercise>"
-  echo "  count <exercise>"
-  echo "  start <exercise> <reps> <interval>"
-  echo "  goal <start time> <end time> <exercise> <start reps> <end reps>"
-  echo "  show"
-  echo "  edit"
-  echo "  summary <date>"
+  echo "  add <exercise> <reps> - add a new exercise"
+  echo "  today <exercise> - show today's reps for an exercise"
+  echo "  count <exercise> - show total reps for an exercise"
+  echo "  start <exercise> <reps> <interval> - start a timer for an exercise"
+  echo "  goal <start time> <end time> <exercise> <start reps> <end reps> - show progress towards a goal"
+  echo "  workout <file> <sets> - start a workout"
+  echo "  show - show all exercises"
+  echo "  edit - edit the exercise file"
+  echo "  summary <date> - show summary for a date"
+  echo "  help - show this help"
+}
+
+if [ $# -eq 0 ]; then
   exit 1
 fi
 
@@ -145,6 +150,9 @@ case "$1" in
           }
         }
         '
+    ;;
+  help)
+    usage
     ;;
   *)
     echo "Unknown command: $1"
