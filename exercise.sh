@@ -120,6 +120,41 @@ case "$1" in
       sleep 1
     done
     ;;
+  workout)
+    if [ $# -ne 3 ]; then
+      echo "Usage: $0 workout <file> <sets>"
+      exit 1
+    fi
+
+    sets="$3"
+
+    for ((i=0; i<sets; i++)); do
+      while read -r line <&3; do
+        if [ -z "$line" ]; then
+          continue
+        fi
+
+        exercise="$(echo "$line" | awk '{print $1}')"
+        reps="$(echo "$line" | awk '{print $2}')"
+        interval="$(echo "$line" | awk '{print $3}')"
+
+        "$0" add "$exercise" "$reps"
+        echo "Added $reps $exercise"
+
+        "$0" today "$exercise"
+
+        countdown "$interval"
+
+        read -r -p "Continue? [y/n] " yn
+        case "$yn" in
+          [Yy]* ) continue;;
+          [Nn]* ) break;;
+          * ) continue;;
+        esac
+
+      done 3< "$2"
+    done
+    ;;
   show)
     cat "$filename"
     ;;
