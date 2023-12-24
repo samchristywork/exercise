@@ -15,6 +15,7 @@ function usage() {
   echo "  start <exercise> <reps> <interval> - start a timer for an exercise"
   echo "  goal <start time> <end time> <exercise> <start reps> <end reps> - show progress towards a goal"
   echo "  workout <file> <sets> - start a workout"
+  echo "  records - show records"
   echo "  show - show all exercises"
   echo "  edit - edit the exercise file"
   echo "  summary <date> - show summary for a date"
@@ -63,17 +64,13 @@ case "$1" in
     exercise="$2"
 
     awk '
-      BEGIN{
-        a=0
-      }
+      BEGIN { a=0 }
       {
         if($4=="'"$exercise"'"){
           a+=$3
         }
       }
-      END{
-        print a
-      }' < "$filename"
+      END { print a }' < "$filename"
     ;;
   start)
     if [ $# -ne 4 ]; then
@@ -157,6 +154,20 @@ case "$1" in
     ;;
   show)
     cat "$filename"
+    ;;
+  records)
+    awk '{print $4}' "$filename" | sort | uniq | while read -r line; do
+      awk -F '\t' '
+      BEGIN { a=0 }
+      /'"$line"'/ {
+        if ($2>a) {
+          a=$2
+        }
+      }
+      END {
+        print a, "'"$line"'"
+      }' < "$filename"
+    done
     ;;
   edit)
     "$EDITOR" "$filename"
