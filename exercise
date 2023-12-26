@@ -167,18 +167,24 @@ case "$1" in
     column -t -s $'\t' "$filename"
     ;;
   records)
-    awk '{print $4}' "$filename" | sort | uniq | while read -r line; do
-      awk -F '\t' '
-      BEGIN { a=0 }
-      /'"$line"'/ {
-        if ($2>a) {
-          a=$2
+    (
+      echo "Reps	Exercise"
+      awk '{print $4}' "$filename" | sort | uniq | while read -r line; do
+        awk -F '\t' '
+        BEGIN {
+          OFS="\t"
+          a=0
         }
-      }
-      END {
-        print a, "'"$line"'"
-      }' < "$filename"
-    done
+        /'"$line"'/ {
+          if ($2>a) {
+            a=$2
+          }
+        }
+        END {
+          print a, "'"$line"'"
+        }' < "$filename"
+      done
+    ) | column -t -s $'\t'
     ;;
   edit)
     "$EDITOR" "$filename"
