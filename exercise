@@ -164,7 +164,7 @@ case "$1" in
     done
     ;;
   show)
-    cat "$filename"
+    column -t -s $'\t' "$filename"
     ;;
   records)
     awk '{print $4}' "$filename" | sort | uniq | while read -r line; do
