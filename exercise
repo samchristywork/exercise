@@ -119,12 +119,22 @@ case "$1" in
     done
     ;;
   workout)
-    if [ $# -ne 3 ]; then
-      echo "Usage: $0 workout <file> <sets>"
+    workout_file=""
+    sets=0
+
+    if [ $# -eq 3 ]; then
+      workout_file="$2"
+      sets="$3"
+    elif [ $# -eq 2 ]; then
+      workout_file="$HOME/.config/last_workout"
+      $EDITOR "$workout_file"
+      sets="$2"
+    else
+      echo "Usage:"
+      echo "	$0 workout <file> <sets>"
+      echo "	$0 workout <sets>"
       exit 1
     fi
-
-    sets="$3"
 
     for ((i=0; i<sets; i++)); do
       while read -r line <&3; do
@@ -150,7 +160,7 @@ case "$1" in
           * ) continue;;
         esac
 
-      done 3< "$2"
+      done 3< "$workout_file"
     done
     ;;
   show)
