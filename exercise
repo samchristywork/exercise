@@ -142,6 +142,10 @@ case "$1" in
           continue
         fi
 
+        if [[ "$line" =~ ^# ]]; then
+          continue
+        fi
+
         exercise="$(echo "$line" | awk '{print $1}')"
         reps="$(echo "$line" | awk '{print $2}')"
         interval="$(echo "$line" | awk '{print $3}')"
