@@ -163,6 +163,7 @@ case "$1" in
 
         countdown "$interval"
 
+        echo "Sets left: $((sets - i))/$sets"
         read -r -p "Continue? [y/n] " yn
         case "$yn" in
           [Yy]* ) continue;;
