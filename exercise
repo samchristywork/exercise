@@ -19,6 +19,7 @@ function usage() {
   echo "  show - show all exercises"
   echo "  edit - edit the exercise file"
   echo "  summary <date> - show summary for a date"
+  echo "  graph - show graph"
   echo "  help - show this help"
 }
 
@@ -242,6 +243,32 @@ case "$1" in
           }
         }
         '
+    ;;
+  graph)
+    "$0" show > /tmp/fitness_data.txt
+    gnuplot << EOF
+set terminal svg size 1024,768 enhanced font 'Verdana,20'
+set output '/tmp/fitness_graph.svg'
+
+# Title and labels
+set title "Fitness Activity Over Time"
+set xlabel "Date"
+set ylabel "Reps"
+set grid
+set xdata time
+set timefmt "%Y-%m-%d"
+set format x "%Y-%m-%d"
+set xtics rotate by -20
+
+plot '/tmp/fitness_data.txt' \
+        using 1:2 title 'Curls' with lines linewidth 2 smooth csplines, \
+     '' using 1:3 title 'Pushups' with lines linewidth 2 smooth csplines, \
+     '' using 1:4 title 'Pullups' with lines linewidth 2 smooth csplines, \
+     '' using 1:5 title 'Endurance' with lines linewidth 2 smooth csplines
+
+set output
+EOF
+    firefox fitness_graph.svg
     ;;
   help)
     usage
