@@ -141,7 +141,7 @@ case "$1" in
       exit 1
     fi
 
-    for ((i=0; i<sets; i++)); do
+    for ((i=1; i<sets+1; i++)); do
       while read -r line <&3; do
         if [ -z "$line" ]; then
           continue
