@@ -30,8 +30,13 @@ fi
 function countdown() {
   secs=$1
   while [ "$secs" -gt 0 ]; do
+    read -r -t 1 -n 1 input
+    if [ $? -eq 0 ]; then
+      if [ "$input" = "" ]; then
+        break
+      fi
+    fi
     echo -ne "$secs\033[0K\r"
-    sleep 1
     : $((secs--))
   done
 }
