@@ -165,7 +165,7 @@ case "$1" in
         read -r -p "Continue? [y/n] " yn
         case "$yn" in
           [Yy]* ) continue;;
-          [Nn]* ) break;;
+          [Nn]* ) exit;;
           * ) continue;;
         esac
 
