@@ -173,7 +173,27 @@ case "$1" in
     done
     ;;
   show)
-    column -t -s $'\t' "$filename"
+    (
+      printf "Date\tCurls\tPushups\tPullups\tEndurance\n"
+      cat "$filename" | awk -F '\t' '
+      BEGIN {
+      }
+      {
+        split($1, a, " ")
+        data[a[1]][$3] += $2
+      }
+      END {
+        for (date in data) {
+          printf "%s\t", date
+          printf "%d\t", data[date]["curls"]
+          printf "%d\t", data[date]["pushups"]
+          printf "%d\t", data[date]["pullups"]
+          printf "%d\t", data[date]["endurance"]
+          printf "\n"
+        }
+      }
+      ' | sort
+    ) | column -t
     ;;
   records)
     (
